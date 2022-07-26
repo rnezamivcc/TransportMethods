@@ -30,8 +30,7 @@
 #pragma comment( lib, "legacy_stdio_definitions.lib" )		// needed for VS 2015 While Linking ( NEW )
 #endif
 
-typedef Vector3<float> MathVec;
-typedef Vector3<USHORT> MathVecS;
+typedef Vector3<USHORT> ushort3;
 
 typedef enum
 {
@@ -61,7 +60,7 @@ float iSpeed = 25.0f;
 int circleSections = 16;
 const float angleInc = PI / 180.f;
 
-MathVec eye(25.f, 10.f, 100.f);
+float3 eye(25.f, 10.f, 100.f);
 int winWidth = 800;
 int winHeight = 600;
 const float ratio = (float)winHeight / (float)winWidth;
@@ -76,13 +75,13 @@ int framerate = 30;
 bool checkWindowResize();
 struct TracePoint
 {
-	MathVec position;
-	MathVecS color;
+	float3 position;
+	ushort3 color;
 };
 struct Object3D
 {
-	MathVec pos, acc;
-	MathVecS vel;
+	float3 pos, acc;
+	ushort3 vel;
 	int red, green, blue;
 	float tParam;
 	float mass;
@@ -94,9 +93,9 @@ struct Object3D
 	{
 		assert(traceCount < maxPointCount);
 		posTrace[traceCount].position = pos;
-		MathVec velF;
+		float3 velF;
 		if(traceCount > 0)
-			velF = MathVec(pos - posTrace[traceCount - 1].position);
+			velF = float3(pos - posTrace[traceCount - 1].position);
 		
 		vel.x = min(max((int)velF.x, FLT_MIN), 255); 
 		vel.y = min(max((int)velF.y, FLT_MIN), 255); 
@@ -108,7 +107,7 @@ struct Object3D
 		return posTrace[traceCount++];
 	}
 	Object3D() { traceCount = 0; }
-	void set(float x, float y, float z, float m, MathVec v, int r, int g, int b)
+	void set(float x, float y, float z, float m, float3 v, int r, int g, int b)
 	{
 		pos.x = x;
 		pos.y = y;
@@ -241,7 +240,7 @@ void initPhysics(float rad, float speed, float angle)
 	float inity = rad;
 	float initz = WorldDepth/2.f;
 	simBall.tParam = 0.f;
-	simBall.set(initX, inity, initz, 2, MathVec(vx, vy, vz), 128, 128, 0);
+	simBall.set(initX, inity, initz, 2, float3(vx, vy, vz), 128, 128, 0);
 }
 
 const float gravity = 9.81f;
