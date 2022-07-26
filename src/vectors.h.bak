@@ -315,36 +315,36 @@ public:
 	}
 	/*The following operators simply return Vector4ds that
 	have operations performed on the relative (x, y, z, w) values*/
-	Vector4& operator+=(const Vector4<T>& v) { x += v.x; y += v.y; z += v.z; w += v.w; return *this; }
-	Vector4& operator-=(const Vector4<T>& v) { x -= v.x; y -= v.y; z -= v.z; w -= v.w; return *this; }
-	Vector4& operator*=(const Vector4<T>& v) { x *= v.x; y *= v.y; z *= v.z; w *= v.w; return *this; }
-	Vector4& operator/=(const Vector4<T>& v) { x /= v.x; y /= v.y; z /= v.z; w /= v.w; return *this; }
+	Vector4d& operator+=(const Vector4d<T>& v) { x += v.x; y += v.y; z += v.z; w += v.w; return *this; }
+	Vector4d& operator-=(const Vector4d<T>& v) { x -= v.x; y -= v.y; z -= v.z; w -= v.w; return *this; }
+	Vector4d& operator*=(const Vector4d<T>& v) { x *= v.x; y *= v.y; z *= v.z; w *= v.w; return *this; }
+	Vector4d& operator/=(const Vector4d<T>& v) { x /= v.x; y /= v.y; z /= v.z; w /= v.w; return *this; }
 
-	Vector4& operator+=(const float s) { x += s; y += s; z += s; return *this; }
-	Vector4& operator-=(const float s) { x -= s; y -= s; z -= s; return *this; }
-	Vector4& operator*=(const float s) { x *= s; y *= s; z *= s; return *this; }
-	Vector4& operator/=(const float s) { x /= s; y /= s; z /= s; return *this; }
+	Vector4d& operator+=(const float s) { x += s; y += s; z += s; return *this; }
+	Vector4d& operator-=(const float s) { x -= s; y -= s; z -= s; return *this; }
+	Vector4d& operator*=(const float s) { x *= s; y *= s; z *= s; return *this; }
+	Vector4d& operator/=(const float s) { x /= s; y /= s; z /= s; return *this; }
 
 	//Check if the Vectors have the same values (uses pairwise comparison of 
 	// 'std::tuple' on the x, y values of L and R.)
-	friend bool operator==(const Vector4& L, const Vector4& R) {
+	friend bool operator==(const Vector4d& L, const Vector4d& R) {
 		return std::tie(L.x, L.y, L.z, L.w) == std::tie(R.x, R.y, R.z, R.w);
 	}
-	friend bool operator!=(const Vector4& L, const Vector4& R) { return !(L == R); }
+	friend bool operator!=(const Vector4d& L, const Vector4d& R) { return !(L == R); }
 
 	void set(T a, T b, T c) { x = a; y = b; z = c; }
 	/*Check which Vectors are closer or further from the origin.*/
-	friend bool operator>(const Vector4& L, const Vector4& R) { return LengthSq(L) < LengthSq(R); }
-	friend bool operator>=(const Vector4& L, const Vector4& R) { return !(L > R); }
-	friend bool operator<(const Vector4& L, const Vector4& R) { return R < L; }
-	friend bool operator<=(const Vector4& L, const Vector4& R) { return !(R < L); }
+	friend bool operator>(const Vector4d& L, const Vector4d& R) { return LengthSq(L) < LengthSq(R); }
+	friend bool operator>=(const Vector4d& L, const Vector4d& R) { return !(L > R); }
+	friend bool operator<(const Vector4d& L, const Vector4d& R) { return R < L; }
+	friend bool operator<=(const Vector4d& L, const Vector4d& R) { return !(R < L); }
 
 	//Negate both the x and y values.
-	Vector3<T> operator-() const { return Vector3d<T>(-x, -y, -z, -w); }
+	Vector3d<T> operator-() const { return Vector3d<T>(-x, -y, -z, -w); }
 
 	//Apply scalar operations.
-	Vector4 operator*(T s) { Vector4 tmp(*this); tmp.x *= s; tmp.y *= s; tmp.z *= s; tmp.w *= s;  return tmp; }
-	Vector4 operator/(T s) { Vector4 tmp(*this); tmp.x /= s; tmp.y /= s; tmp.z /= s tmp.w /= s;  return tmp; }
+	Vector4d operator*(T s) { Vector4d tmp(*this); tmp.x *= s; tmp.y *= s; tmp.z *= s; tmp.w *= s;  return tmp; }
+	Vector4d operator/(T s) { Vector4d tmp(*this); tmp.x /= s; tmp.y /= s; tmp.z /= s tmp.w /= s;  return tmp; }
 
 	//Returns the length of the vector from the origin.
 	double Length() const { return sqrt(x*x + y * y + z * z + w*w); }
