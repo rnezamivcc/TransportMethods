@@ -23,8 +23,6 @@
     <ClCompile Include="wcode\fswin32wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\Downloads\tmp\JordanLloyd_A2\JordanLloyd_A2\PhysicsBase.h" />
-    <ClInclude Include="..\..\..\..\..\..\Downloads\tmp\JordanLloyd_A2\JordanLloyd_A2\RopeSimulation.h" />
     <ClInclude Include="bitmapfont\ysglfontdata.h" />
     <ClInclude Include="fssimplewindow.h" />
     <ClInclude Include="Matrices.h" />

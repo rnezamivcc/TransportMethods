@@ -71,12 +71,6 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\Downloads\tmp\JordanLloyd_A2\JordanLloyd_A2\PhysicsBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\Downloads\tmp\JordanLloyd_A2\JordanLloyd_A2\RopeSimulation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="vectors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
