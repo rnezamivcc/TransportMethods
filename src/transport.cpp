@@ -208,7 +208,7 @@ struct Object3D
 		glPopMatrix();
 	}
 };
-Object3D simBall;
+Object3D cross;
 
 /* material properties for objects in scene */
 static GLfloat wall_mat[] = { 1.f, 1.f, 1.f, 1.f };
@@ -239,15 +239,15 @@ void initPhysics(float rad, float speed, float angle)
 	float initX = rad;
 	float inity = rad;
 	float initz = WorldDepth/2.f;
-	simBall.tParam = 0.f;
-	simBall.set(initX, inity, initz, 2, float3(vx, vy, vz), 128, 128, 0);
+	cross.tParam = 0.f;
+	cross.set(initX, inity, initz, 2, float3(vx, vy, vz), 128, 128, 0);
 }
 
 const float gravity = 9.81f;
 /////////////////////////////////////////////////////////////////////
 float Initz = WorldDepth / 2.f;
 
-void updatePhysics(Object3D &ball, float timeInc)
+void updatePhysics(Object3D &obj, float timeInc)
 {
 	//////////// your physics goes here //////////////////////////
 	// we use a coordinate system in which x goes from left to right of the screen and y goes from bottom to top of the screen
@@ -262,13 +262,13 @@ void updatePhysics(Object3D &ball, float timeInc)
 	//update trace
 //	std::cout << "Pos(" << ball.traceCount << ":" << ball.pos.x << "," << ball.pos.y << "," << ball.pos.z << "==" << tp.position.x << "," << tp.position.y << "," << tp.position.z << std::endl;
 //update using formula and param:
-	ball.tParam += timeInc;
+	obj.tParam += timeInc;
 	const float rt13 = sqrt(13.f);
-	float t_rt13 = ball.tParam / rt13;
-	ball.pos.x = 2.f * t_rt13;
-	ball.pos.y = 9.f * sin(t_rt13) + 10.f;
-	ball.pos.z = 9.f * cos(t_rt13) +Initz;
-	TracePoint &tp = ball.SetNextTracePoint(timeInc);
+	float t_rt13 = obj.tParam / rt13;
+	obj.pos.x = 2.f * t_rt13;
+	obj.pos.y = 9.f * sin(t_rt13) + 10.f;
+	obj.pos.z = 9.f * cos(t_rt13) +Initz;
+	TracePoint &tp = obj.SetNextTracePoint(timeInc);
 }
 
 void resetPhysics()
@@ -280,11 +280,11 @@ void zoom(bool zoomIn)
 {
 	if (zoomIn)
 	{
-		eye += (simBall.pos - eye) * 0.1f;
+		eye += (cross.pos - eye) * 0.1f;
 	}
 	else
 	{
-		eye -= (simBall.pos - eye) * 0.1f;
+		eye -= (cross.pos - eye) * 0.1f;
 	}
 }
 
@@ -434,15 +434,15 @@ void renderScene(bool reset)
 	checkWindowResize();
 
 	// set the camera
-	gluLookAt(eye.x, eye.y, eye.z, simBall.pos.x, simBall.pos.y, simBall.pos.z, 0.0f, 1.0f, 0.0f);
+	gluLookAt(eye.x, eye.y, eye.z, cross.pos.x, cross.pos.y, cross.pos.z, 0.0f, 1.0f, 0.0f);
 
 	//////////////////// draw the ground ///////////////
 	DrawFloor();
 
 	// draw the frame and its trace:
-	simBall.DrawTrace();
-	simBall.DrawFrame(2.f, reset);
-	simBall.DrawObject(2.f, reset);
+	cross.DrawTrace();
+	cross.DrawFrame(2.f, reset);
+	cross.DrawObject(2.f, reset);
 
 	// draw walls:
 	glEnable(GL_LIGHTING);
@@ -550,14 +550,14 @@ int Game(void)
 		timeInc = passedTime * 0.001f;
 		clocktime += timeInc;
 		/////////// update physics /////////////////
-		if (simBall.pos.y < -0.01f)
+		if (cross.pos.y < -0.01f)
 		{
 			resetPhysics();
 			resetFlag = true;
 		}
 
 		if (!resetFlag)
-			updatePhysics(simBall, timeInc);
+			updatePhysics(cross, timeInc);
 		/////////////////////////////////////////
 		renderScene(!resetFlag);
 
@@ -608,7 +608,7 @@ void GameOver(int score)
 		glRasterPos2i(32,32);
 		glCallLists(strlen(msg1),GL_UNSIGNED_BYTE,msg1);
 
-		sprintf(msg2,"Your score is %d",score);
+		sprintf_s(msg2,"Your score is %d",score);
 
 		glRasterPos2i(32,48);
 		glCallLists(strlen(msg2),GL_UNSIGNED_BYTE,msg2);
