@@ -78,8 +78,6 @@ private:
 
 };
 
-
-
 ///////////////////////////////////////////////////////////////////////////
 // inline functions for Matrix2
 ///////////////////////////////////////////////////////////////////////////
@@ -182,6 +180,7 @@ inline std::ostream& operator<<(std::ostream& os, const Matrix2& m)
 // END OF MATRIX2 INLINE //////////////////////////////////////////////////////
 
 
+
 ///////////////////////////////////////////////////////////////////////////
 // 3x3 matrix
 ///////////////////////////////////////////////////////////////////////////
@@ -190,33 +189,51 @@ class Matrix3
 public:
     // constructors
     Matrix3();  // init with identity
-    Matrix3(const float src[9]);
-    Matrix3(float m0, float m1, float m2,           // 1st column
-            float m3, float m4, float m5,           // 2nd column
-            float m6, float m7, float m8);          // 3rd column
+	Matrix3(float3 row1, float3 row2, float3 row3)
+		: rows{ row1, row2, row3 } {}
 
-    void        set(const float src[9]);
-    void        set(float m0, float m1, float m2,   // 1st column
-                    float m3, float m4, float m5,   // 2nd column
-                    float m6, float m7, float m8);  // 3rd column
-    void        setRow(int index, const float row[3]);
-    void        setRow(int index, const float3& v);
-    void        setColumn(int index, const float col[3]);
-    void        setColumn(int index, const float3& v);
+    void  setRow(size_t idx, float3 row)
+	{
+		assert(idx < 3);
+		rows[idx] = row;
+	}
+	void  setCol(size_t idx, float3 v) 
+	{
+		assert(idx < 3);
+		rows[0].set(idx, v[0]);
+		rows[1].set(idx, v[1]);
+		rows[2].set(idx, v[2]);
+	}
 
-    const float* get() const;
-    float       getDeterminant();
+	float3 getRow(size_t i) const 
+	{
+		assert(i < 3); return rows[i];
+	}
+	float3 getCol(size_t i) const 
+	{
+		assert(i < 3);
+		return{ rows[0][i], rows[1][i], rows[2][i] };
 
-    Matrix3&    identity();
-    Matrix3&    transpose();                            // transpose itself and return reference
-    Matrix3&    invert();
+	}
+	float       getDeterminant();
+
+	static Matrix3  identity() { return Matrix3({ 1.f, 0.f, 0.f }, 
+												{ 0.f, 1.f, 0.f },
+												{ 0.f, 0.f, 1.f }); 
+	}
+	static Matrix3  zero() { return Matrix3(	{ 0.f, 0.f, 0.f },
+												{ 0.f, 0.f, 0.f },
+												{ 0.f, 0.f, 0.f });
+	}
+	Matrix3    transpose() {return Matrix3(getCol(0), getCol(1), getCol(2)); }
+    Matrix3    invert();
 
     // operators
     Matrix3     operator+(const Matrix3& rhs) const;    // add rhs
     Matrix3     operator-(const Matrix3& rhs) const;    // subtract rhs
     Matrix3&    operator+=(const Matrix3& rhs);         // add rhs and update this object
     Matrix3&    operator-=(const Matrix3& rhs);         // subtract rhs and update this object
-    float3     operator*(const float3& rhs) const;    // multiplication: v' = M * v
+	float3     operator*(const float3& rhs) const;    // multiplication: v' = M * v
     Matrix3     operator*(const Matrix3& rhs) const;    // multiplication: M3 = M1 * M2
     Matrix3&    operator*=(const Matrix3& rhs);         // multiplication: M1' = M1 * M2
     bool        operator==(const Matrix3& rhs) const;   // exact compare, no epsilon
@@ -232,159 +249,54 @@ public:
 protected:
 
 private:
-    float m[9];
-
+	float3 rows[3];
 };
-
-
-
 
 ///////////////////////////////////////////////////////////////////////////
 // inline functions for Matrix3
 ///////////////////////////////////////////////////////////////////////////
+
 inline Matrix3::Matrix3()
 {
-    // initially identity matrix
-    identity();
+	*this = identity();
 }
-
-
-
-inline Matrix3::Matrix3(const float src[9])
-{
-    set(src);
-}
-
-
-
-inline Matrix3::Matrix3(float m0, float m1, float m2,
-                        float m3, float m4, float m5,
-                        float m6, float m7, float m8)
-{
-    set(m0, m1, m2,  m3, m4, m5,  m6, m7, m8);
-}
-
-
-
-inline void Matrix3::set(const float src[9])
-{
-    m[0] = src[0];  m[1] = src[1];  m[2] = src[2];
-    m[3] = src[3];  m[4] = src[4];  m[5] = src[5];
-    m[6] = src[6];  m[7] = src[7];  m[8] = src[8];
-}
-
-
-
-inline void Matrix3::set(float m0, float m1, float m2,
-                         float m3, float m4, float m5,
-                         float m6, float m7, float m8)
-{
-    m[0] = m0;  m[1] = m1;  m[2] = m2;
-    m[3] = m3;  m[4] = m4;  m[5] = m5;
-    m[6] = m6;  m[7] = m7;  m[8] = m8;
-}
-
-
-
-inline void Matrix3::setRow(int index, const float row[3])
-{
-    m[index] = row[0];  m[index + 3] = row[1];  m[index + 6] = row[2];
-}
-
-
-
-inline void Matrix3::setRow(int index, const float3& v)
-{
-    m[index] = v.x;  m[index + 3] = v.y;  m[index + 6] = v.z;
-}
-
-
-
-inline void Matrix3::setColumn(int index, const float col[3])
-{
-    m[index*3] = col[0];  m[index*3 + 1] = col[1];  m[index*3 + 2] = col[2];
-}
-
-
-
-inline void Matrix3::setColumn(int index, const float3& v)
-{
-    m[index*3] = v.x;  m[index*3 + 1] = v.y;  m[index*3 + 2] = v.z;
-}
-
-
-
-inline const float* Matrix3::get() const
-{
-    return m;
-}
-
-
-
-inline Matrix3& Matrix3::identity()
-{
-    m[0] = m[4] = m[8] = 1.0f;
-    m[1] = m[2] = m[3] = m[5] = m[6] = m[7] = 0.0f;
-    return *this;
-}
-
-
-
 inline Matrix3 Matrix3::operator+(const Matrix3& rhs) const
 {
-    return Matrix3(m[0]+rhs[0], m[1]+rhs[1], m[2]+rhs[2],
-                   m[3]+rhs[3], m[4]+rhs[4], m[5]+rhs[5],
-                   m[6]+rhs[6], m[7]+rhs[7], m[8]+rhs[8]);
+	return Matrix3(rows[0] + rhs.rows[0], rows[1] + rhs.rows[1], rows[2] + rhs.rows[2]);
 }
-
-
 
 inline Matrix3 Matrix3::operator-(const Matrix3& rhs) const
 {
-    return Matrix3(m[0]-rhs[0], m[1]-rhs[1], m[2]-rhs[2],
-                   m[3]-rhs[3], m[4]-rhs[4], m[5]-rhs[5],
-                   m[6]-rhs[6], m[7]-rhs[7], m[8]-rhs[8]);
+	return Matrix3(rows[0] - rhs.rows[0], rows[1] - rhs.rows[1], rows[2] - rhs.rows[2]);
 }
-
-
 
 inline Matrix3& Matrix3::operator+=(const Matrix3& rhs)
 {
-    m[0] += rhs[0];  m[1] += rhs[1];  m[2] += rhs[2];
-    m[3] += rhs[3];  m[4] += rhs[4];  m[5] += rhs[5];
-    m[6] += rhs[6];  m[7] += rhs[7];  m[8] += rhs[8];
-    return *this;
+	rows[0] += rhs.rows[0];
+	rows[1] += rhs.rows[1];
+	rows[2] += rhs.rows[2];
+	return *this;
 }
-
-
 
 inline Matrix3& Matrix3::operator-=(const Matrix3& rhs)
 {
-    m[0] -= rhs[0];  m[1] -= rhs[1];  m[2] -= rhs[2];
-    m[3] -= rhs[3];  m[4] -= rhs[4];  m[5] -= rhs[5];
-    m[6] -= rhs[6];  m[7] -= rhs[7];  m[8] -= rhs[8];
-    return *this;
+	rows[0] -= rhs.rows[0];
+	rows[1] -= rhs.rows[1];
+	rows[2] -= rhs.rows[2];
+	return *this;
 }
-
-
 
 inline float3 Matrix3::operator*(const float3& rhs) const
 {
-    return float3(m[0]*rhs.x + m[3]*rhs.y + m[6]*rhs.z,
-                   m[1]*rhs.x + m[4]*rhs.y + m[7]*rhs.z,
-                   m[2]*rhs.x + m[5]*rhs.y + m[8]*rhs.z);
+	return float3(Dot(rows[0], rhs), Dot(rows[1], rhs), Dot(rows[2], rhs));
 }
-
-
 
 inline Matrix3 Matrix3::operator*(const Matrix3& rhs) const
 {
-    return Matrix3(m[0]*rhs[0] + m[3]*rhs[1] + m[6]*rhs[2],  m[1]*rhs[0] + m[4]*rhs[1] + m[7]*rhs[2],  m[2]*rhs[0] + m[5]*rhs[1] + m[8]*rhs[2],
-                   m[0]*rhs[3] + m[3]*rhs[4] + m[6]*rhs[5],  m[1]*rhs[3] + m[4]*rhs[4] + m[7]*rhs[5],  m[2]*rhs[3] + m[5]*rhs[4] + m[8]*rhs[5],
-                   m[0]*rhs[6] + m[3]*rhs[7] + m[6]*rhs[8],  m[1]*rhs[6] + m[4]*rhs[7] + m[7]*rhs[8],  m[2]*rhs[6] + m[5]*rhs[7] + m[8]*rhs[8]);
+	return Matrix3( { Dot(rows[0], rhs.getCol(0)) , Dot(rows[0], rhs.getCol(1)), Dot(rows[0], rhs.getCol(2)) },
+					{ Dot(rows[1], rhs.getCol(0)) , Dot(rows[1], rhs.getCol(1)), Dot(rows[1], rhs.getCol(2)) },
+					{ Dot(rows[2], rhs.getCol(0)) , Dot(rows[2], rhs.getCol(1)), Dot(rows[2], rhs.getCol(2)) } );
 }
-
-
 
 inline Matrix3& Matrix3::operator*=(const Matrix3& rhs)
 {
@@ -392,69 +304,40 @@ inline Matrix3& Matrix3::operator*=(const Matrix3& rhs)
     return *this;
 }
 
-
-
 inline bool Matrix3::operator==(const Matrix3& rhs) const
 {
-    return (m[0] == rhs[0]) && (m[1] == rhs[1]) && (m[2] == rhs[2]) &&
-           (m[3] == rhs[3]) && (m[4] == rhs[4]) && (m[5] == rhs[5]) &&
-           (m[6] == rhs[6]) && (m[7] == rhs[7]) && (m[8] == rhs[8]);
+	return (rows[0] == rhs.rows[0] && rows[1] == rhs.rows[1] && rows[2] == rhs.rows[2]);
 }
-
-
 
 inline bool Matrix3::operator!=(const Matrix3& rhs) const
 {
-    return (m[0] != rhs[0]) || (m[1] != rhs[1]) || (m[2] != rhs[2]) ||
-           (m[3] != rhs[3]) || (m[4] != rhs[4]) || (m[5] != rhs[5]) ||
-           (m[6] != rhs[6]) || (m[7] != rhs[7]) || (m[8] != rhs[8]);
+	return !(*this == rhs);
 }
 
-
-
-inline float Matrix3::operator[](int index) const
-{
-    return m[index];
-}
-
-
-
-inline float& Matrix3::operator[](int index)
-{
-    return m[index];
-}
-
-
-
+//////////// friends //////////////////////
 inline Matrix3 operator-(const Matrix3& rhs)
 {
-    return Matrix3(-rhs[0], -rhs[1], -rhs[2], -rhs[3], -rhs[4], -rhs[5], -rhs[6], -rhs[7], -rhs[8]);
+    return Matrix3(-rhs.rows[0], -rhs.rows[1], -rhs.rows[2]);
 }
-
-
 
 inline Matrix3 operator*(float s, const Matrix3& rhs)
 {
-    return Matrix3(s*rhs[0], s*rhs[1], s*rhs[2], s*rhs[3], s*rhs[4], s*rhs[5], s*rhs[6], s*rhs[7], s*rhs[8]);
+	return Matrix3(s*rhs.rows[0], s*rhs.rows[1], s*rhs.rows[2]);
 }
 
-
-
-inline float3 operator*(const float3& v, const Matrix3& m)
+inline float3 operator*(const float3& v, const Matrix3& rhs)
 {
-    return float3(v.x*m[0] + v.y*m[1] + v.z*m[2],  v.x*m[3] + v.y*m[4] + v.z*m[5],  v.x*m[6] + v.y*m[7] + v.z*m[8]);
+	return{ Dot(v, rhs.getCol(0)), Dot(v, rhs.getCol(1)), Dot(v, rhs.getCol(2)) };
 }
-
-
 
 inline std::ostream& operator<<(std::ostream& os, const Matrix3& m)
 {
-    os << std::fixed << std::setprecision(5);
-    os << "[" << std::setw(10) << m[0] << " " << std::setw(10) << m[3] << " " << std::setw(10) << m[6] << "]\n"
-       << "[" << std::setw(10) << m[1] << " " << std::setw(10) << m[4] << " " << std::setw(10) << m[7] << "]\n"
-       << "[" << std::setw(10) << m[2] << " " << std::setw(10) << m[5] << " " << std::setw(10) << m[8] << "]\n";
-    os << std::resetiosflags(std::ios_base::fixed | std::ios_base::floatfield);
-    return os;
+	os << std::fixed << std::setprecision(5);
+	os << "[" << std::setw(10) << m.rows[0][0] << " " << std::setw(10) << m.rows[0][1] << " " << std::setw(10) << m.rows[0][2] << "]\n"
+	   << "[" << std::setw(10) << m.rows[1][0] << " " << std::setw(10) << m.rows[1][1] << " " << std::setw(10) << m.rows[1][2] << "]\n"
+	   << "[" << std::setw(10) << m.rows[2][0] << " " << std::setw(10) << m.rows[2][1] << " " << std::setw(10) << m.rows[2][2] << "]\n";
+	os << std::resetiosflags(std::ios_base::fixed | std::ios_base::floatfield);
+	return os;
 }
 // END OF MATRIX3 INLINE //////////////////////////////////////////////////////
 
@@ -494,9 +377,9 @@ public:
     Matrix4&    transpose();                            // transpose itself and return reference
     Matrix4&    invert();                               // check best inverse method before inverse
     Matrix4&    invertEuclidean();                      // inverse of Euclidean transform matrix
-    Matrix4&    invertAffine();                         // inverse of affine transform matrix
-    Matrix4&    invertProjective();                     // inverse of projective matrix using partitioning
-    Matrix4&    invertGeneral();                        // inverse of generic matrix
+  //  Matrix4&    invertAffine();                         // inverse of affine transform matrix
+  //  Matrix4&    invertProjective();                     // inverse of projective matrix using partitioning
+   // Matrix4&    invertGeneral();                        // inverse of generic matrix
 
     // transform matrix
     Matrix4&    translate(float x, float y, float z);   // translation by (x,y,z)
