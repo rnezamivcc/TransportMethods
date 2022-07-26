@@ -200,9 +200,9 @@ public:
                     float m3, float m4, float m5,   // 2nd column
                     float m6, float m7, float m8);  // 3rd column
     void        setRow(int index, const float row[3]);
-    void        setRow(int index, const float3D& v);
+    void        setRow(int index, const float3& v);
     void        setColumn(int index, const float col[3]);
-    void        setColumn(int index, const float3D& v);
+    void        setColumn(int index, const float3& v);
 
     const float* get() const;
     float       getDeterminant();
@@ -216,7 +216,7 @@ public:
     Matrix3     operator-(const Matrix3& rhs) const;    // subtract rhs
     Matrix3&    operator+=(const Matrix3& rhs);         // add rhs and update this object
     Matrix3&    operator-=(const Matrix3& rhs);         // subtract rhs and update this object
-    float3D     operator*(const float3D& rhs) const;    // multiplication: v' = M * v
+    float3     operator*(const float3& rhs) const;    // multiplication: v' = M * v
     Matrix3     operator*(const Matrix3& rhs) const;    // multiplication: M3 = M1 * M2
     Matrix3&    operator*=(const Matrix3& rhs);         // multiplication: M1' = M1 * M2
     bool        operator==(const Matrix3& rhs) const;   // exact compare, no epsilon
@@ -226,7 +226,7 @@ public:
 
     friend Matrix3 operator-(const Matrix3& m);                     // unary operator (-)
     friend Matrix3 operator*(float scalar, const Matrix3& m);       // pre-multiplication
-    friend float3D operator*(const float3D& vec, const Matrix3& m); // pre-multiplication
+    friend float3 operator*(const float3& vec, const Matrix3& m); // pre-multiplication
     friend std::ostream& operator<<(std::ostream& os, const Matrix3& m);
 
 protected:
@@ -293,7 +293,7 @@ inline void Matrix3::setRow(int index, const float row[3])
 
 
 
-inline void Matrix3::setRow(int index, const float3D& v)
+inline void Matrix3::setRow(int index, const float3& v)
 {
     m[index] = v.x;  m[index + 3] = v.y;  m[index + 6] = v.z;
 }
@@ -307,7 +307,7 @@ inline void Matrix3::setColumn(int index, const float col[3])
 
 
 
-inline void Matrix3::setColumn(int index, const float3D& v)
+inline void Matrix3::setColumn(int index, const float3& v)
 {
     m[index*3] = v.x;  m[index*3 + 1] = v.y;  m[index*3 + 2] = v.z;
 }
@@ -368,9 +368,9 @@ inline Matrix3& Matrix3::operator-=(const Matrix3& rhs)
 
 
 
-inline float3D Matrix3::operator*(const float3D& rhs) const
+inline float3 Matrix3::operator*(const float3& rhs) const
 {
-    return float3D(m[0]*rhs.x + m[3]*rhs.y + m[6]*rhs.z,
+    return float3(m[0]*rhs.x + m[3]*rhs.y + m[6]*rhs.z,
                    m[1]*rhs.x + m[4]*rhs.y + m[7]*rhs.z,
                    m[2]*rhs.x + m[5]*rhs.y + m[8]*rhs.z);
 }
@@ -440,9 +440,9 @@ inline Matrix3 operator*(float s, const Matrix3& rhs)
 
 
 
-inline float3D operator*(const float3D& v, const Matrix3& m)
+inline float3 operator*(const float3& v, const Matrix3& m)
 {
-    return float3D(v.x*m[0] + v.y*m[1] + v.z*m[2],  v.x*m[3] + v.y*m[4] + v.z*m[5],  v.x*m[6] + v.y*m[7] + v.z*m[8]);
+    return float3(v.x*m[0] + v.y*m[1] + v.z*m[2],  v.x*m[3] + v.y*m[4] + v.z*m[5],  v.x*m[6] + v.y*m[7] + v.z*m[8]);
 }
 
 
@@ -480,11 +480,11 @@ public:
                     float m08, float m09, float m10, float m11, // 3rd column
                     float m12, float m13, float m14, float m15);// 4th column
     void        setRow(int index, const float row[4]);
-    void        setRow(int index, const Vector4& v);
-    void        setRow(int index, const float3D& v);
+    void        setRow(int index, const float4& v);
+    void        setRow(int index, const float3& v);
     void        setColumn(int index, const float col[4]);
-    void        setColumn(int index, const Vector4& v);
-    void        setColumn(int index, const float3D& v);
+    void        setColumn(int index, const float4& v);
+    void        setColumn(int index, const float3& v);
 
     const float* get() const;
     const float* getTranspose();                        // return transposed matrix
@@ -500,8 +500,8 @@ public:
 
     // transform matrix
     Matrix4&    translate(float x, float y, float z);   // translation by (x,y,z)
-    Matrix4&    translate(const float3D& v);            //
-    Matrix4&    rotate(float angle, const float3D& axis); // rotate angle(degree) along the given axix
+    Matrix4&    translate(const float3& v);            //
+    Matrix4&    rotate(float angle, const float3& axis); // rotate angle(degree) along the given axix
     Matrix4&    rotate(float angle, float x, float y, float z);
     Matrix4&    rotateX(float angle);                   // rotate on X-axis with degree
     Matrix4&    rotateY(float angle);                   // rotate on Y-axis with degree
@@ -514,8 +514,8 @@ public:
     Matrix4     operator-(const Matrix4& rhs) const;    // subtract rhs
     Matrix4&    operator+=(const Matrix4& rhs);         // add rhs and update this object
     Matrix4&    operator-=(const Matrix4& rhs);         // subtract rhs and update this object
-    Vector4     operator*(const Vector4& rhs) const;    // multiplication: v' = M * v
-    float3D     operator*(const float3D& rhs) const;    // multiplication: v' = M * v
+    float4     operator*(const float4& rhs) const;    // multiplication: v' = M * v
+    float3     operator*(const float3& rhs) const;    // multiplication: v' = M * v
     Matrix4     operator*(const Matrix4& rhs) const;    // multiplication: M3 = M1 * M2
     Matrix4&    operator*=(const Matrix4& rhs);         // multiplication: M1' = M1 * M2
     bool        operator==(const Matrix4& rhs) const;   // exact compare, no epsilon
@@ -525,8 +525,8 @@ public:
 
     friend Matrix4 operator-(const Matrix4& m);                     // unary operator (-)
     friend Matrix4 operator*(float scalar, const Matrix4& m);       // pre-multiplication
-    friend float3D operator*(const float3D& vec, const Matrix4& m); // pre-multiplication
-    friend Vector4 operator*(const Vector4& vec, const Matrix4& m); // pre-multiplication
+    friend float3 operator*(const float3& vec, const Matrix4& m); // pre-multiplication
+    friend float4 operator*(const float4& vec, const Matrix4& m); // pre-multiplication
     friend std::ostream& operator<<(std::ostream& os, const Matrix4& m);
 
 protected:
@@ -601,14 +601,14 @@ inline void Matrix4::setRow(int index, const float row[4])
 
 
 
-inline void Matrix4::setRow(int index, const Vector4& v)
+inline void Matrix4::setRow(int index, const float4& v)
 {
     m[index] = v.x;  m[index + 4] = v.y;  m[index + 8] = v.z;  m[index + 12] = v.w;
 }
 
 
 
-inline void Matrix4::setRow(int index, const float3D& v)
+inline void Matrix4::setRow(int index, const float3& v)
 {
     m[index] = v.x;  m[index + 4] = v.y;  m[index + 8] = v.z;
 }
@@ -622,14 +622,14 @@ inline void Matrix4::setColumn(int index, const float col[4])
 
 
 
-inline void Matrix4::setColumn(int index, const Vector4& v)
+inline void Matrix4::setColumn(int index, const float4& v)
 {
     m[index*4] = v.x;  m[index*4 + 1] = v.y;  m[index*4 + 2] = v.z;  m[index*4 + 3] = v.w;
 }
 
 
 
-inline void Matrix4::setColumn(int index, const float3D& v)
+inline void Matrix4::setColumn(int index, const float3& v)
 {
     m[index*4] = v.x;  m[index*4 + 1] = v.y;  m[index*4 + 2] = v.z;
 }
@@ -705,9 +705,9 @@ inline Matrix4& Matrix4::operator-=(const Matrix4& rhs)
 
 
 
-inline Vector4 Matrix4::operator*(const Vector4& rhs) const
+inline float4 Matrix4::operator*(const float4& rhs) const
 {
-    return Vector4(m[0]*rhs.x + m[4]*rhs.y + m[8]*rhs.z  + m[12]*rhs.w,
+    return float4(m[0]*rhs.x + m[4]*rhs.y + m[8]*rhs.z  + m[12]*rhs.w,
                    m[1]*rhs.x + m[5]*rhs.y + m[9]*rhs.z  + m[13]*rhs.w,
                    m[2]*rhs.x + m[6]*rhs.y + m[10]*rhs.z + m[14]*rhs.w,
                    m[3]*rhs.x + m[7]*rhs.y + m[11]*rhs.z + m[15]*rhs.w);
@@ -715,9 +715,9 @@ inline Vector4 Matrix4::operator*(const Vector4& rhs) const
 
 
 
-inline float3D Matrix4::operator*(const float3D& rhs) const
+inline float3 Matrix4::operator*(const float3& rhs) const
 {
-    return float3D(m[0]*rhs.x + m[4]*rhs.y + m[8]*rhs.z,
+    return float3(m[0]*rhs.x + m[4]*rhs.y + m[8]*rhs.z,
                    m[1]*rhs.x + m[5]*rhs.y + m[9]*rhs.z,
                    m[2]*rhs.x + m[6]*rhs.y + m[10]*rhs.z);
 }
@@ -790,16 +790,16 @@ inline Matrix4 operator*(float s, const Matrix4& rhs)
 
 
 
-inline Vector4 operator*(const Vector4& v, const Matrix4& m)
+inline float4 operator*(const float4& v, const Matrix4& m)
 {
-    return Vector4(v.x*m[0] + v.y*m[1] + v.z*m[2] + v.w*m[3],  v.x*m[4] + v.y*m[5] + v.z*m[6] + v.w*m[7],  v.x*m[8] + v.y*m[9] + v.z*m[10] + v.w*m[11], v.x*m[12] + v.y*m[13] + v.z*m[14] + v.w*m[15]);
+    return float4(v.x*m[0] + v.y*m[1] + v.z*m[2] + v.w*m[3],  v.x*m[4] + v.y*m[5] + v.z*m[6] + v.w*m[7],  v.x*m[8] + v.y*m[9] + v.z*m[10] + v.w*m[11], v.x*m[12] + v.y*m[13] + v.z*m[14] + v.w*m[15]);
 }
 
 
 
-inline float3D operator*(const float3D& v, const Matrix4& m)
+inline float3 operator*(const float3& v, const Matrix4& m)
 {
-    return float3D(v.x*m[0] + v.y*m[1] + v.z*m[2],  v.x*m[4] + v.y*m[5] + v.z*m[6],  v.x*m[8] + v.y*m[9] + v.z*m[10]);
+    return float3(v.x*m[0] + v.y*m[1] + v.z*m[2],  v.x*m[4] + v.y*m[5] + v.z*m[6],  v.x*m[8] + v.y*m[9] + v.z*m[10]);
 }
 
 

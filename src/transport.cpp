@@ -151,9 +151,9 @@ struct Object3D
 		else
 			angle = 0.f;
 		// set rotation matrix for the frame to be rotation around z axis by angle degrees
-		float3D T(cosf(angle), sinf(angle), 0);
-		float3D N(-sinf(angle), cosf(angle), 0);
-		float3D B(0.f, 0.f, 1.f);
+		float3 T(cosf(angle), sinf(angle), 0);
+		float3 N(-sinf(angle), cosf(angle), 0);
+		float3 B(0.f, 0.f, 1.f);
 		mView.setColumn(0, T);
 		mView.setColumn(1, N);
 		mView.setColumn(2, B);
@@ -180,9 +180,9 @@ struct Object3D
 		else
 			angle = 0.f;
 		// set rotation matrix for the frame to be rotaton around z axis by angle degrees
-		float3D T(cosf(angle), sinf(angle), 0);
-		float3D N(-sinf(angle), cosf(angle), 0);
-		float3D B(0.f, 0.f, 1.f);
+		float3 T(cosf(angle), sinf(angle), 0);
+		float3 N(-sinf(angle), cosf(angle), 0);
+		float3 B(0.f, 0.f, 1.f);
 		mView.setColumn(0, T);
 		mView.setColumn(1, N);
 		mView.setColumn(2, B);
