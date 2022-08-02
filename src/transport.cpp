@@ -93,7 +93,7 @@ struct Object3D
 	{
 		assert(traceCount < maxPointCount);
 		posTrace[traceCount].position = pos;
-		float3 velF;
+		float3 velF{};
 		if(traceCount > 0)
 			velF = float3(pos - posTrace[traceCount - 1].position);
 		
@@ -153,9 +153,9 @@ struct Object3D
 		float3 T(cosf(angle), sinf(angle), 0);
 		float3 N(-sinf(angle), cosf(angle), 0);
 		float3 B(0.f, 0.f, 1.f);
-		mView.setColumn(0, T);
-		mView.setColumn(1, N);
-		mView.setColumn(2, B);
+		mView.setCol(0, T);
+		mView.setCol(1, N);
+		mView.setCol(2, B);
 
 		// set translation to move the frame to where the object is.
 		mModel.scale(0.04f);
@@ -182,9 +182,9 @@ struct Object3D
 		float3 T(cosf(angle), sinf(angle), 0);
 		float3 N(-sinf(angle), cosf(angle), 0);
 		float3 B(0.f, 0.f, 1.f);
-		mView.setColumn(0, T);
-		mView.setColumn(1, N);
-		mView.setColumn(2, B);
+		mView.setCol(0, T);
+		mView.setCol(1, N);
+		mView.setCol(2, B);
 
 		// set translation to move the frame to where the object is.
 		mModel.translate(pos.x, pos.y, pos.z);

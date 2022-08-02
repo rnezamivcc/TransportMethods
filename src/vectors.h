@@ -281,10 +281,9 @@ public:
 	T w;
 
 	//Constructor assigns the inputs to x and y.
-	Vector4() : x(T()), y(T()), z(T()), w(T()) {}
-	Vector4(T a, T b, T c, T d = T()) : x(a), y(b), z(c), w(d) {}
+	Vector4(T a=T(), T b=T(), T c=T(), T d = T()) : x(a), y(b), z(c), w(d) {}
 	Vector4(T *p) :x(p[0]), y(p[1]), z(p[2]), w(p[3]) {}
-	Vector4(Vector3<T>& p) : x(p.x), y(p.y), z(p.z), w(0.f) {}
+	Vector4(Vector3<T> p) : x(p.x), y(p.y), z(p.z), w(0.f) {}
 
 	T operator[] (size_t i) const {
 		assert(i <= 3);
